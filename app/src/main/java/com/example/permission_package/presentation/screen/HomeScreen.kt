@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.chat_app.data.permissions.location_permission.LocationPermissionUI
 import com.example.permission_package.presentation.permissionUtils.PermissionEvent
 
 @Composable
@@ -31,6 +32,7 @@ fun HomeScreen() {
         if (showLocationUI) {
             LocationPermissionUI(onPermissionEvent = { event ->
                 permissionResult = when (event) {
+                    PermissionEvent.NotGranted -> "Permission not granted"
                     PermissionEvent.Granted -> "Permission Granted"
                     PermissionEvent.OnlyThisTime -> "Permission Only This Time"
                     PermissionEvent.Denied -> "Permission Denied"
