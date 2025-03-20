@@ -1,5 +1,6 @@
 package com.example.permission_package.presentation
 
+import HomeScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.permission_package.presentation.screen.HomeScreen
 import com.example.permission_package.ui.theme.Permission_PackageTheme
 
 class MainActivity : ComponentActivity() {

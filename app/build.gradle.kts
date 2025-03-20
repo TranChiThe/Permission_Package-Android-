@@ -45,6 +45,7 @@ android {
 dependencies {
 // Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation(libs.androidx.datastore.core.android)
 //    implementation(libs.androidx.media3.common.ktx)
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation("androidx.hilt:hilt-work:1.0.0")
@@ -94,6 +95,9 @@ dependencies {
     // Google Play Services Location
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    // Data Store
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
