@@ -8,12 +8,15 @@ import com.example.permission_package.presentation.permissionUtils.PermissionEve
 @Composable
 fun LocationPermissionUI(
     modifier: Modifier = Modifier,
+    shouldRequest: Boolean,
     onPermissionEvent: (PermissionEvent) -> Unit
 ) {
     PermissionHandler(
         modifier = modifier,
         permissions = PermissionList().locationPermissions,
+        shouldRequest = shouldRequest,
         onPermissionEvent = onPermissionEvent
+
     )
 }
 

@@ -19,6 +19,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 fun PermissionHandler(
     modifier: Modifier = Modifier,
     permissions: List<String>,
+    shouldRequest: Boolean,
     onPermissionEvent: (PermissionEvent) -> Unit,
 ) {
     var requestPermission by remember { mutableStateOf(false) }
@@ -30,26 +31,32 @@ fun PermissionHandler(
     val sharedPreferences = remember {
         context.getSharedPreferences("permissions_prefs", Context.MODE_PRIVATE)
     }
+    val hasInteracted = sharedPreferences.getBoolean("has_interacted", false)
+    val wasOneTimePermission = sharedPreferences.getBoolean("one_time_permission", false)
+    val wasPermanentlyDenied = sharedPreferences.getBoolean("permanently_denied", false)
 
-    LaunchedEffect(Unit) {
-        val oneTimePermission = sharedPreferences.getBoolean("one_time_permission", false)
-        val onlyThisTime = permissionsState.permissions.any {
-            !it.status.isGranted && !it.status.shouldShowRationale
-        }
-        val isPermanentlyDenied = permissionsState.permissions.any {
-            !it.status.isGranted && it.status.shouldShowRationale
-        }
+    val onlyThisTime = permissionsState.permissions.any {
+        !it.status.isGranted && !it.status.shouldShowRationale
+    }
+    val isPermanentlyDenied = permissionsState.permissions.any {
+        !it.status.isGranted && it.status.shouldShowRationale
+    }
 
+    val isOneTimePermissionLost = wasOneTimePermission && permissionsState.permissions.any {
+        !it.status.isGranted
+    }
+
+    LaunchedEffect(shouldRequest) {
         if (permissionsState.allPermissionsGranted) {
             onPermissionEvent(PermissionEvent.Granted)
             sharedPreferences.edit().remove("permanently_denied").apply()
         } else {
             if (isPermanentlyDenied) {
                 showSettingsDialog = true
-            } else if (oneTimePermission || onlyThisTime) {
-                sharedPreferences.edit().remove("permanently_denied").apply()
-                sharedPreferences.edit().putBoolean("one_time_permission", true)
+            } else if (isOneTimePermissionLost) {
+                sharedPreferences.edit().putBoolean("one_time_permission", false)
                     .putBoolean("permanently_denied", false).apply()
+                onPermissionEvent(PermissionEvent.OnlyThisTime)
                 requestPermission = true
             } else {
                 requestPermission = true
@@ -59,48 +66,26 @@ fun PermissionHandler(
 
     LaunchedEffect(requestPermission) {
         if (requestPermission) {
-            val hasInteracted = sharedPreferences.getBoolean("has_interacted", false)
-            val permanentlyDenied = sharedPreferences.getBoolean("permanently_denied", false)
-            val oneTimePermission = sharedPreferences.getBoolean("one_time_permission", false)
-
-            if (permanentlyDenied && hasInteracted) {
+            if (wasPermanentlyDenied && hasInteracted) {
                 showSettingsDialog = true
                 onPermissionEvent(PermissionEvent.DeniedPermanently)
             } else {
+                permissionsState.launchMultiplePermissionRequest()
+                sharedPreferences.edit().putBoolean("has_interacted", true).apply()
                 if (permissionsState.allPermissionsGranted) {
                     sharedPreferences.edit().putBoolean("one_time_permission", false)
-                        .putBoolean("permanently_denied", false).putBoolean("has_interacted", true)
-                        .apply()
+                        .putBoolean("permanently_denied", false).apply()
                     onPermissionEvent(PermissionEvent.Granted)
                 } else {
-                    permissionsState.launchMultiplePermissionRequest()
-                    sharedPreferences.edit().putBoolean("has_interacted", true).apply()
-                    if (permissionsState.allPermissionsGranted) {
-                        sharedPreferences.edit().putBoolean("one_time_permission", false)
-                            .putBoolean("permanently_denied", false).apply()
-                        onPermissionEvent(PermissionEvent.Granted)
+                    if (isPermanentlyDenied) {
+                        sharedPreferences.edit().putBoolean("permanently_denied", true).apply()
+                        onPermissionEvent(PermissionEvent.DeniedPermanently)
+                        showSettingsDialog = true
+                    } else if (onlyThisTime) {
+                        sharedPreferences.edit().putBoolean("one_time_permission", true).apply()
+                        onPermissionEvent(PermissionEvent.OnlyThisTime)
                     } else {
-                        val isPermanentlyDenied = permissionsState.permissions.any {
-                            !it.status.isGranted && it.status.shouldShowRationale
-                        }
-                        val onlyThisTime = permissionsState.permissions.any {
-                            !it.status.isGranted && !it.status.shouldShowRationale
-                        }
-                        if (isPermanentlyDenied) {
-                            sharedPreferences.edit().putBoolean("one_time_permission", false)
-                                .putBoolean("permanently_denied", true).apply()
-                            onPermissionEvent(PermissionEvent.DeniedPermanently)
-                            showSettingsDialog = true
-                        } else if (onlyThisTime) {
-                            sharedPreferences.edit().putBoolean("one_time_permission", true)
-                                .putBoolean("permanently_denied", false).apply()
-                            sharedPreferences.edit().remove("permanently_denied").apply() //
-                            onPermissionEvent(PermissionEvent.OnlyThisTime)
-                            requestPermission = true
-                        } else {
-                            onPermissionEvent(PermissionEvent.Denied)
-                            requestPermission = true
-                        }
+                        onPermissionEvent(PermissionEvent.Denied)
                     }
                 }
             }
