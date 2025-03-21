@@ -39,5 +39,11 @@ fun HomeScreen() {
         PermissionRequestButton(
             permissions = listOf("message"), buttonText = "Request Message Permission"
         )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Camera
+        PermissionRequestButton(
+            permissions = listOf("camera"), buttonText = "Request Camera Permission"
+        )
     }
 }

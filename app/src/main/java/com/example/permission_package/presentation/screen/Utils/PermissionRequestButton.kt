@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.chat_app.data.permissions.location_permission.ContactsPermissionUI
 import com.example.chat_app.data.permissions.location_permission.LocationPermissionUI
 import com.example.chat_app.data.permissions.location_permission.PhoneStatePermissionUI
+import com.example.permission_package.presentation.permissionUi.CameraPermissionUI
 import com.example.permission_package.presentation.permissionUi.MessagePermissionUI
 import com.example.permission_package.presentation.permissionUtils.PermissionEvent
 
@@ -62,6 +63,15 @@ fun PermissionRequestButton(
                     )
 
                     "message" -> MessagePermissionUI(
+                        permissionName = "Message",
+                        shouldRequest = showPermissionUI,
+                        onPermissionEvent = { event ->
+                            showPermissionUI = false
+                            showPermissionToast(context, "Message", event)
+                        }
+                    )
+
+                    "camera" -> CameraPermissionUI(
                         permissionName = "Message",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
