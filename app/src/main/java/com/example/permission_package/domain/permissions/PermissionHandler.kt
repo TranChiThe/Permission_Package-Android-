@@ -1,4 +1,4 @@
-package com.example.permission_package.data.permissions
+package com.example.permission_package.domain.permissions
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -18,6 +18,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 @Composable
 fun PermissionHandler(
     modifier: Modifier = Modifier,
+    permissionName: String,
     permissions: List<String>,
     shouldRequest: Boolean,
     onPermissionEvent: (PermissionEvent) -> Unit,
@@ -35,7 +36,7 @@ fun PermissionHandler(
     val wasOneTimePermission = sharedPreferences.getBoolean("one_time_permission", false)
     val wasPermanentlyDenied = sharedPreferences.getBoolean("permanently_denied", false)
 
-    val onlyThisTime = permissionsState.permissions.any {
+    val isOneTimePermission = permissionsState.permissions.any {
         !it.status.isGranted && !it.status.shouldShowRationale
     }
     val isPermanentlyDenied = permissionsState.permissions.any {
@@ -47,6 +48,7 @@ fun PermissionHandler(
     }
 
     LaunchedEffect(shouldRequest) {
+        if (!shouldRequest) return@LaunchedEffect
         if (permissionsState.allPermissionsGranted) {
             onPermissionEvent(PermissionEvent.Granted)
             sharedPreferences.edit().remove("permanently_denied").apply()
@@ -81,7 +83,7 @@ fun PermissionHandler(
                         sharedPreferences.edit().putBoolean("permanently_denied", true).apply()
                         onPermissionEvent(PermissionEvent.DeniedPermanently)
                         showSettingsDialog = true
-                    } else if (onlyThisTime) {
+                    } else if (isOneTimePermission) {
                         sharedPreferences.edit().putBoolean("one_time_permission", true).apply()
                         onPermissionEvent(PermissionEvent.OnlyThisTime)
                     } else {
@@ -96,9 +98,13 @@ fun PermissionHandler(
     Column(
         modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SettingsDialog(showDialog = showSettingsDialog, onDismiss = {
-            showSettingsDialog = false
-            onPermissionEvent(PermissionEvent.DeniedPermanently)
-        }, openSettings = { openAppSettings(context) })
+        SettingsDialog(permissionName = permissionName,
+            showDialog = showSettingsDialog,
+            onDismiss = {
+                showSettingsDialog = false
+                onPermissionEvent(PermissionEvent.DeniedPermanently)
+            },
+            openSettings = { openAppSettings(context) })
     }
 }
+

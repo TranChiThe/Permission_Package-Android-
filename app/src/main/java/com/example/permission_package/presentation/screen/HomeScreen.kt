@@ -14,14 +14,18 @@ import com.example.chat_app.data.permissions.location_permission.LocationPermiss
 import com.example.permission_package.presentation.permissionUtils.PermissionEvent
 import android.widget.Toast
 import com.example.chat_app.data.permissions.location_permission.ContactsPermissionUI
+import com.example.chat_app.data.permissions.location_permission.PhoneStatePermissionUI
 
 @Composable
 fun HomeScreen() {
+    val context = LocalContext.current
+
     var showLocationUI by remember { mutableStateOf(false) }
     var permissionLocationResult by remember { mutableStateOf<String?>(null) }
     var showContactsUI by remember { mutableStateOf(false) }
     var permissionContactsResult by remember { mutableStateOf<String?>(null) }
-    val context = LocalContext.current
+    var showPhoneStateUI by remember { mutableStateOf(false) }
+    var permissionPhoneStateResult by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -29,6 +33,7 @@ fun HomeScreen() {
             .padding(top = 150.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Location
         Button(onClick = {
             showLocationUI = true
         }) {
@@ -39,6 +44,7 @@ fun HomeScreen() {
         }
         if (showLocationUI) {
             LocationPermissionUI(
+                permissionName = "location",
                 onPermissionEvent = { event ->
                     permissionLocationResult = when (event) {
                         PermissionEvent.Granted -> {
@@ -58,7 +64,10 @@ fun HomeScreen() {
                 }, shouldRequest = showLocationUI
             )
         }
+
         Spacer(modifier = Modifier.height(20.dp))
+
+        // Contacts
         Button(onClick = {
             showContactsUI = true
         }) {
@@ -69,6 +78,7 @@ fun HomeScreen() {
         }
         if (showContactsUI) {
             ContactsPermissionUI(
+                permissionName = "contacts",
                 onPermissionEvent = { event ->
                     permissionContactsResult = when (event) {
                         PermissionEvent.Granted -> {
@@ -86,6 +96,40 @@ fun HomeScreen() {
                     }
                     showContactsUI = false
                 }, shouldRequest = showContactsUI
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Phone State
+        Button(onClick = {
+            showPhoneStateUI = true
+        }) {
+            Text("Request Contacts Permission")
+        }
+        permissionPhoneStateResult?.let {
+            Text(it, modifier = Modifier.padding(8.dp))
+        }
+        if (showPhoneStateUI) {
+            PhoneStatePermissionUI (
+                permissionName = "phone state",
+                onPermissionEvent = { event ->
+                    permissionPhoneStateResult = when (event) {
+                        PermissionEvent.Granted -> {
+                            Toast.makeText(
+                                context, "Contacts Permission Granted", Toast.LENGTH_SHORT).show()
+                            "Permission Granted"
+                        }
+
+                        PermissionEvent.NotGranted, PermissionEvent.OnlyThisTime, PermissionEvent.Denied, PermissionEvent.DeniedPermanently -> {
+                            Toast.makeText(
+                                context, "Contacts Permission Not Granted", Toast.LENGTH_SHORT
+                            ).show()
+                            "Contacts Not Granted"
+                        }
+                    }
+                    showPhoneStateUI = false
+                }, shouldRequest = showPhoneStateUI
             )
         }
     }
