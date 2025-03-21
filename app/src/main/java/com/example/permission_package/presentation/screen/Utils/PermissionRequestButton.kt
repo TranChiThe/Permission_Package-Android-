@@ -17,13 +17,11 @@ import com.example.chat_app.data.permissions.location_permission.LocationPermiss
 import com.example.chat_app.data.permissions.location_permission.PhoneStatePermissionUI
 import com.example.permission_package.presentation.permissionUi.CameraPermissionUI
 import com.example.permission_package.presentation.permissionUi.MessagePermissionUI
+import com.example.permission_package.presentation.permissionUi.RecordAudioPermissionUI
 import com.example.permission_package.presentation.permissionUtils.PermissionEvent
 
 @Composable
-fun PermissionRequestButton(
-    permissions: List<String>,
-    buttonText: String
-) {
+fun PermissionRequestButton(permissions: List<String>, buttonText: String) {
     val context = LocalContext.current
     var showPermissionUI by remember { mutableStateOf(false) }
 
@@ -35,50 +33,47 @@ fun PermissionRequestButton(
         if (showPermissionUI) {
             permissions.forEach { permission ->
                 when (permission) {
-                    "location" -> LocationPermissionUI(
-                        permissionName = "Location",
+                    "location" -> LocationPermissionUI(permissionName = "Location",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
                             showPermissionUI = false
                             showPermissionToast(context, "Location", event)
-                        }
-                    )
+                        })
 
-                    "contacts" -> ContactsPermissionUI(
-                        permissionName = "Contacts",
+                    "contacts" -> ContactsPermissionUI(permissionName = "Contacts",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
                             showPermissionUI = false
                             showPermissionToast(context, "Contacts", event)
-                        }
-                    )
+                        })
 
-                    "phone_state" -> PhoneStatePermissionUI(
-                        permissionName = "Phone State",
+                    "phone_state" -> PhoneStatePermissionUI(permissionName = "Phone State",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
                             showPermissionUI = false
                             showPermissionToast(context, "Phone State", event)
-                        }
-                    )
+                        })
 
-                    "message" -> MessagePermissionUI(
-                        permissionName = "Message",
+                    "message" -> MessagePermissionUI(permissionName = "Message",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
                             showPermissionUI = false
                             showPermissionToast(context, "Message", event)
-                        }
-                    )
+                        })
 
-                    "camera" -> CameraPermissionUI(
-                        permissionName = "Message",
+                    "camera" -> CameraPermissionUI(permissionName = "Message",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
                             showPermissionUI = false
                             showPermissionToast(context, "Message", event)
-                        }
-                    )
+                        })
+
+                    "record_audio" -> RecordAudioPermissionUI(permissionName = "Message",
+                        shouldRequest = showPermissionUI,
+                        onPermissionEvent = { event ->
+                            showPermissionUI = false
+                            showPermissionToast(context, "Message", event)
+                        })
                 }
             }
         }

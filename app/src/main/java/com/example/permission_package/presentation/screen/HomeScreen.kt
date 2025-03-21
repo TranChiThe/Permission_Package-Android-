@@ -45,5 +45,12 @@ fun HomeScreen() {
         PermissionRequestButton(
             permissions = listOf("camera"), buttonText = "Request Camera Permission"
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Record Audio
+        PermissionRequestButton(
+            permissions = listOf("record_audio"), buttonText = "Request Record Audio Permission"
+        )
     }
 }
