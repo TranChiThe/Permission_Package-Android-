@@ -31,7 +31,7 @@ fun HomeScreen() {
 
         //Phone State
         PermissionRequestButton(
-            permissions = listOf("phone"), buttonText = "Request Phone State Permission"
+            permissions = listOf("phone_state"), buttonText = "Request Phone State Permission"
         )
         Spacer(modifier = Modifier.height(20.dp))
 

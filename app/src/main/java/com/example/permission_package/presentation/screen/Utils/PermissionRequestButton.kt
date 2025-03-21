@@ -52,7 +52,7 @@ fun PermissionRequestButton(
                         }
                     )
 
-                    "phone" -> PhoneStatePermissionUI(
+                    "phone_state" -> PhoneStatePermissionUI(
                         permissionName = "Phone State",
                         shouldRequest = showPermissionUI,
                         onPermissionEvent = { event ->
