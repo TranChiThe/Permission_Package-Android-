@@ -72,5 +72,13 @@ fun HomeScreen() {
             permissionType = "read_media",
             buttonText = "Request Read Media Permission"
         )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Read Media
+        PermissionRequestButton(
+            permissions = PermissionList().postNotificationPermission,
+            permissionType = "post_notification",
+            buttonText = "Request Notification Permission"
+        )
     }
 }

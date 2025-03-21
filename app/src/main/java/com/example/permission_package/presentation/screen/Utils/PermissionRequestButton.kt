@@ -17,6 +17,7 @@ import com.example.chat_app.data.permissions.location_permission.LocationPermiss
 import com.example.chat_app.data.permissions.location_permission.PhoneStatePermissionUI
 import com.example.permission_package.presentation.permissionUi.CameraPermissionUI
 import com.example.permission_package.presentation.permissionUi.MessagePermissionUI
+import com.example.permission_package.presentation.permissionUi.PostNotificationPermissionUI
 import com.example.permission_package.presentation.permissionUi.ReadMedialPermissionUI
 import com.example.permission_package.presentation.permissionUi.RecordAudioPermissionUI
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -95,6 +96,15 @@ fun PermissionRequestButton(
                     })
 
                 "read_media" -> ReadMedialPermissionUI(permissionName = "Read Media",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Read Media", permissionsState.allPermissionsGranted
+                        )
+                    })
+
+                "post_notification" -> PostNotificationPermissionUI(permissionName = "Post Notification",
                     shouldRequest = showPermissionUI,
                     onPermissionEvent = {
                         showPermissionUI = false
