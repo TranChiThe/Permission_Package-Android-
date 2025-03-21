@@ -47,7 +47,7 @@ fun PermissionHandler(
         !it.status.isGranted
     }
 
-    LaunchedEffect(shouldRequest) {
+    LaunchedEffect(shouldRequest, permissionsState.allPermissionsGranted) {
         if (!shouldRequest) return@LaunchedEffect
         if (permissionsState.allPermissionsGranted) {
             onPermissionEvent(PermissionEvent.Granted)

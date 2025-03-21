@@ -17,13 +17,21 @@ import com.example.chat_app.data.permissions.location_permission.LocationPermiss
 import com.example.chat_app.data.permissions.location_permission.PhoneStatePermissionUI
 import com.example.permission_package.presentation.permissionUi.CameraPermissionUI
 import com.example.permission_package.presentation.permissionUi.MessagePermissionUI
+import com.example.permission_package.presentation.permissionUi.ReadMedialPermissionUI
 import com.example.permission_package.presentation.permissionUi.RecordAudioPermissionUI
-import com.example.permission_package.presentation.permissionUtils.PermissionEvent
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun PermissionRequestButton(permissions: List<String>, buttonText: String) {
+fun PermissionRequestButton(
+    permissions: List<String>,
+    permissionType: String,
+    buttonText: String,
+) {
     val context = LocalContext.current
     var showPermissionUI by remember { mutableStateOf(false) }
+    val permissionsState = rememberMultiplePermissionsState(permissions)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Button(onClick = { showPermissionUI = true }) {
@@ -31,61 +39,79 @@ fun PermissionRequestButton(permissions: List<String>, buttonText: String) {
         }
 
         if (showPermissionUI) {
-            permissions.forEach { permission ->
-                when (permission) {
-                    "location" -> LocationPermissionUI(permissionName = "Location",
-                        shouldRequest = showPermissionUI,
-                        onPermissionEvent = { event ->
-                            showPermissionUI = false
-                            showPermissionToast(context, "Location", event)
-                        })
+            when (permissionType) {
+                "location" -> LocationPermissionUI(permissionName = "Location",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Location", permissionsState.allPermissionsGranted
+                        )
+                    })
 
-                    "contacts" -> ContactsPermissionUI(permissionName = "Contacts",
-                        shouldRequest = showPermissionUI,
-                        onPermissionEvent = { event ->
-                            showPermissionUI = false
-                            showPermissionToast(context, "Contacts", event)
-                        })
+                "contacts" -> ContactsPermissionUI(permissionName = "Contacts",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Contacts", permissionsState.allPermissionsGranted
+                        )
+                    })
 
-                    "phone_state" -> PhoneStatePermissionUI(permissionName = "Phone State",
-                        shouldRequest = showPermissionUI,
-                        onPermissionEvent = { event ->
-                            showPermissionUI = false
-                            showPermissionToast(context, "Phone State", event)
-                        })
+                "phone_state" -> PhoneStatePermissionUI(permissionName = "Phone State",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Phone State", permissionsState.allPermissionsGranted
+                        )
+                    })
 
-                    "message" -> MessagePermissionUI(permissionName = "Message",
-                        shouldRequest = showPermissionUI,
-                        onPermissionEvent = { event ->
-                            showPermissionUI = false
-                            showPermissionToast(context, "Message", event)
-                        })
+                "message" -> MessagePermissionUI(permissionName = "Message",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Message", permissionsState.allPermissionsGranted
+                        )
+                    })
 
-                    "camera" -> CameraPermissionUI(permissionName = "Message",
-                        shouldRequest = showPermissionUI,
-                        onPermissionEvent = { event ->
-                            showPermissionUI = false
-                            showPermissionToast(context, "Message", event)
-                        })
+                "camera" -> CameraPermissionUI(permissionName = "Camera",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Camera", permissionsState.allPermissionsGranted
+                        )
+                    })
 
-                    "record_audio" -> RecordAudioPermissionUI(permissionName = "Message",
-                        shouldRequest = showPermissionUI,
-                        onPermissionEvent = { event ->
-                            showPermissionUI = false
-                            showPermissionToast(context, "Message", event)
-                        })
-                }
+                "record_audio" -> RecordAudioPermissionUI(permissionName = "Record Audio",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Record Audio", permissionsState.allPermissionsGranted
+                        )
+                    })
+
+                "read_media" -> ReadMedialPermissionUI(permissionName = "Read Media",
+                    shouldRequest = showPermissionUI,
+                    onPermissionEvent = {
+                        showPermissionUI = false
+                        showPermissionToast(
+                            context, "Read Media", permissionsState.allPermissionsGranted
+                        )
+                    })
             }
         }
     }
 }
 
-fun showPermissionToast(context: Context, permissionName: String, event: PermissionEvent) {
-    val message = when (event) {
-        PermissionEvent.Granted -> "$permissionName Permission Granted ✅"
-        PermissionEvent.Denied, PermissionEvent.DeniedPermanently -> "$permissionName Permission Denied ❌"
-        PermissionEvent.NotGranted -> ""
-        PermissionEvent.OnlyThisTime -> ""
+fun showPermissionToast(context: Context, permissionName: String, isGranted: Boolean) {
+    val message = if (isGranted) {
+        "$permissionName Permission Granted ✅"
+    } else {
+        "$permissionName Permission Denied ❌"
     }
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

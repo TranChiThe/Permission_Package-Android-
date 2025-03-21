@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.chat_app.data.permissions.location_permission.PermissionList
 import com.example.permission_package.presentation.screen.Utils.PermissionRequestButton
 
 @Composable
@@ -19,38 +20,57 @@ fun HomeScreen() {
     ) {
         // Location
         PermissionRequestButton(
-            permissions = listOf("location"), buttonText = "Request Location Permission"
+            permissions = PermissionList().locationPermissions,
+            permissionType = "location",
+            buttonText = "Request Location Permission"
         )
         Spacer(modifier = Modifier.height(20.dp))
 
         // Contacts
         PermissionRequestButton(
-            permissions = listOf("contacts"), buttonText = "Request Contacts Permission"
+            permissions = PermissionList().contactPermissions,
+            permissionType = "contacts",
+            buttonText = "Request Contacts Permission"
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        //Phone State
+        // Phone State
         PermissionRequestButton(
-            permissions = listOf("phone_state"), buttonText = "Request Phone State Permission"
+            permissions = PermissionList().phoneStatePermissions,
+            permissionType = "phone_state",
+            buttonText = "Request Phone State Permission"
         )
         Spacer(modifier = Modifier.height(20.dp))
 
         // Message
         PermissionRequestButton(
-            permissions = listOf("message"), buttonText = "Request Message Permission"
+            permissions = PermissionList().messagePermission,
+            permissionType = "message",
+            buttonText = "Request Message Permission"
         )
         Spacer(modifier = Modifier.height(20.dp))
 
         // Camera
         PermissionRequestButton(
-            permissions = listOf("camera"), buttonText = "Request Camera Permission"
+            permissions = PermissionList().cameraPermission,
+            permissionType = "camera",
+            buttonText = "Request Camera Permission"
         )
-
         Spacer(modifier = Modifier.height(20.dp))
 
         // Record Audio
         PermissionRequestButton(
-            permissions = listOf("record_audio"), buttonText = "Request Record Audio Permission"
+            permissions = PermissionList().recordAudioPermission,
+            permissionType = "record_audio",
+            buttonText = "Request Record Audio Permission"
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Read Media
+        PermissionRequestButton(
+            permissions = PermissionList().readMediaPermission,
+            permissionType = "read_media",
+            buttonText = "Request Read Media Permission"
         )
     }
 }
