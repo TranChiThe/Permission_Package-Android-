@@ -1,6 +1,8 @@
 package com.example.permission_package.domain.permissions
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,16 +25,16 @@ fun PermissionHandler(
     shouldRequest: Boolean,
     onPermissionEvent: (PermissionEvent) -> Unit,
 ) {
-    var requestPermission by remember { mutableStateOf(false) }
-    var showSettingsDialog by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
-    val permissionsState = rememberMultiplePermissionsState(permissions)
-
     val sharedPreferences = remember {
         context.getSharedPreferences("permissions_prefs", Context.MODE_PRIVATE)
     }
+    val permissionsState = rememberMultiplePermissionsState(permissions)
     val hasInteracted = sharedPreferences.getBoolean("has_interacted", false)
+
+    var requestPermission by remember { mutableStateOf(false) }
+    var showSettingsDialog by remember { mutableStateOf(false) }
+
     val wasOneTimePermission = sharedPreferences.getBoolean("one_time_permission", false)
     val wasPermanentlyDenied = sharedPreferences.getBoolean("permanently_denied", false)
 
@@ -107,4 +109,5 @@ fun PermissionHandler(
             openSettings = { openAppSettings(context) })
     }
 }
+
 

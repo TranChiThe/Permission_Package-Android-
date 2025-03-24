@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Permission_Package</string>
+    <string name="permission_pkg_dialog_title">Permission Required</string>
+    <string name="permission_pkg_dialog_message">Please grant %1$s permission in Settings.</string>
+    <string name="permission_pkg_open_settings">Open Settings</string>
+    <string name="permission_pkg_cancel">Cancel</string>
 </resources>

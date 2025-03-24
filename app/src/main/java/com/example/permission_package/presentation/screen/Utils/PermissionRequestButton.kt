@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,10 +30,17 @@ fun PermissionRequestButton(
     permissions: List<String>,
     permissionType: String,
     buttonText: String,
+    onPermissionGranted: () -> Unit,
 ) {
     val context = LocalContext.current
     var showPermissionUI by remember { mutableStateOf(false) }
     val permissionsState = rememberMultiplePermissionsState(permissions)
+
+    LaunchedEffect(permissionsState.allPermissionsGranted) {
+        if (permissionsState.allPermissionsGranted) {
+//            onPermissionGranted()
+        }
+    }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Button(onClick = { showPermissionUI = true }) {
@@ -48,6 +56,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Location", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "contacts" -> ContactsPermissionUI(permissionName = "Contacts",
@@ -57,6 +68,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Contacts", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "phone_state" -> PhoneStatePermissionUI(permissionName = "Phone State",
@@ -66,6 +80,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Phone State", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "message" -> MessagePermissionUI(permissionName = "Message",
@@ -75,6 +92,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Message", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "camera" -> CameraPermissionUI(permissionName = "Camera",
@@ -84,6 +104,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Camera", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "record_audio" -> RecordAudioPermissionUI(permissionName = "Record Audio",
@@ -93,6 +116,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Record Audio", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "read_media" -> ReadMedialPermissionUI(permissionName = "Read Media",
@@ -102,6 +128,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Read Media", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
 
                 "post_notification" -> PostNotificationPermissionUI(permissionName = "Post Notification",
@@ -111,6 +140,9 @@ fun PermissionRequestButton(
                         showPermissionToast(
                             context, "Read Media", permissionsState.allPermissionsGranted
                         )
+                        if (permissionsState.allPermissionsGranted) {
+                            onPermissionGranted()
+                        }
                     })
             }
         }

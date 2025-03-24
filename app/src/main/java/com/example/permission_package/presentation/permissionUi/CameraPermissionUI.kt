@@ -1,6 +1,6 @@
 package com.example.permission_package.presentation.permissionUi
 
-import com.example.chat_app.data.permissions.location_permission.PermissionList
+import com.example.permission_package.data.PermissionList
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.permission_package.domain.permissions.PermissionHandler
@@ -11,14 +11,14 @@ fun CameraPermissionUI(
     modifier: Modifier = Modifier,
     permissionName: String,
     shouldRequest: Boolean,
-    onPermissionEvent: (PermissionEvent) -> Unit,
+    onPermissionEvent:  (PermissionEvent) -> Unit,
 ) {
     PermissionHandler(
         modifier = modifier,
         permissionName = permissionName,
         permissions = PermissionList().cameraPermission,
         shouldRequest = shouldRequest,
-        onPermissionEvent = onPermissionEvent
+        onPermissionEvent = onPermissionEvent,
     )
 }
 

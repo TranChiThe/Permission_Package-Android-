@@ -1,6 +1,6 @@
 package com.example.permission_package.presentation.permissionUi
 
-import com.example.chat_app.data.permissions.location_permission.PermissionList
+import com.example.permission_package.data.PermissionList
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.permission_package.domain.permissions.PermissionHandler
@@ -12,13 +12,13 @@ fun RecordAudioPermissionUI(
     permissionName: String,
     shouldRequest: Boolean,
     onPermissionEvent: (PermissionEvent) -> Unit,
-) {
+    ) {
     PermissionHandler(
         modifier = modifier,
         permissionName = permissionName,
         permissions = PermissionList().recordAudioPermission,
         shouldRequest = shouldRequest,
-        onPermissionEvent = onPermissionEvent
+        onPermissionEvent = onPermissionEvent,
     )
 }
 

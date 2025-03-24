@@ -1,4 +1,4 @@
-package com.example.chat_app.data.permissions.location_permission
+package com.example.permission_package.data
 
 import android.Manifest
 
@@ -24,12 +24,9 @@ class PermissionList() {
         Manifest.permission.CAMERA,
     )
 
-    val microPhonePermission = listOf(
-        Manifest.permission.FOREGROUND_SERVICE_MICROPHONE
-    )
-
     val recordAudioPermission = listOf(
-        Manifest.permission.RECORD_AUDIO
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.FOREGROUND_SERVICE_MICROPHONE
     )
 
     val readMediaPermission = listOf(

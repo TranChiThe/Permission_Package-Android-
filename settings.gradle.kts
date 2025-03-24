@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Permission_Package"
 include(":app")
- 
+include(":I18N_InLang")

@@ -29,7 +29,14 @@ fun SettingsDialog(
     permissionName: String,
     showDialog: Boolean,
     onDismiss: () -> Unit,
-    openSettings: () -> Unit
+    openSettings: () -> Unit,
+    title: String = "We Need Your Permission",
+    message: String = "To keep the chat flowing, please grant $permissionName access in Settings. It helps us connect you better!",
+    settingsButtonText: String = "Go to Settings",
+    dismissButtonText: String = "Not Now",
+    primaryColor: Color = PrimaryBlue,
+    surfaceColor: Color = SurfaceWhite,
+    textColor: Color = TextGray
 ) {
     if (showDialog) {
         Dialog(onDismissRequest = { onDismiss() }) {
@@ -37,7 +44,7 @@ fun SettingsDialog(
                 modifier = Modifier
                     .width(300.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(SurfaceWhite),
+                    .background(surfaceColor),
                 shadowElevation = 8.dp
             ) {
                 Column(
@@ -47,25 +54,21 @@ fun SettingsDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "We Need Your Permission",
+                        text = title,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = PrimaryBlue,
+                        color = primaryColor,
                         textAlign = TextAlign.Center
                     )
-
                     Spacer(modifier = Modifier.height(12.dp))
-
                     Text(
-                        text = "To keep the chat flowing, please grant $permissionName access in Settings. It helps us connect you better!",
+                        text = message,
                         fontSize = 16.sp,
-                        color = TextGray,
+                        color = textColor,
                         textAlign = TextAlign.Center,
                         lineHeight = 22.sp
                     )
-
                     Spacer(modifier = Modifier.height(24.dp))
-
                     Button(
                         onClick = {
                             openSettings()
@@ -76,27 +79,25 @@ fun SettingsDialog(
                             .height(48.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = PrimaryBlue,
+                            containerColor = primaryColor,
                             contentColor = OnPrimaryWhite
                         )
                     ) {
                         Text(
-                            text = "Go to Settings",
+                            text = settingsButtonText,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
                     }
-
                     Spacer(modifier = Modifier.height(12.dp))
-
                     TextButton(
                         onClick = { onDismiss() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "Not Now",
+                            text = dismissButtonText,
                             fontSize = 16.sp,
-                            color = PrimaryBlue,
+                            color = primaryColor,
                             fontWeight = FontWeight.Medium
                         )
                     }
