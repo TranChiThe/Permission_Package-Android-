@@ -1,13 +1,18 @@
-package com.example.permission_package.presentation.permissionUtils
+package com.example.permission_package.presentation.dialog_setting
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,16 +28,15 @@ val PrimaryBlue = Color(0xFF42A5F5)
 val SurfaceWhite = Color(0xFFFFFFFF)
 val OnPrimaryWhite = Color(0xFFFFFFFF)
 val TextGray = Color(0xFF666666)
-
 @Composable
-fun SettingsDialog(
+fun PermissionSetting(
     permissionName: String,
     showDialog: Boolean,
     onDismiss: () -> Unit,
-    openSettings: () -> Unit,
-    title: String = "We Need Your Permission",
-    message: String = "To keep the chat flowing, please grant $permissionName access in Settings. It helps us connect you better!",
-    settingsButtonText: String = "Go to Settings",
+    onRequestPermissionAgain: () -> Unit,
+    title: String = "Why We Need This Permission?",
+    message: String = "To ensure the best experience, please grant $permissionName access. This allows us to serve you better!",
+    requestButtonText: String = "Go to settings",
     dismissButtonText: String = "Not Now",
     primaryColor: Color = PrimaryBlue,
     surfaceColor: Color = SurfaceWhite,
@@ -71,7 +75,7 @@ fun SettingsDialog(
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
                         onClick = {
-                            openSettings()
+                            onRequestPermissionAgain()
                             onDismiss()
                         },
                         modifier = Modifier
@@ -84,7 +88,7 @@ fun SettingsDialog(
                         )
                     ) {
                         Text(
-                            text = settingsButtonText,
+                            text = requestButtonText,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -105,12 +109,4 @@ fun SettingsDialog(
             }
         }
     }
-}
-
-fun openAppSettings(context: Context) {
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        data = Uri.fromParts("package", context.packageName, null)
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    context.startActivity(intent)
 }

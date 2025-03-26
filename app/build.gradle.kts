@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
 }
 
@@ -56,10 +55,6 @@ android {
 }
 
 dependencies {
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Jetpack Compose
     implementation("androidx.compose.material3:material3:1.2.0")
